@@ -45,6 +45,18 @@ Rồi chọn một:
 - Không liên quan thay đổi này → nói rõ nó đã fail từ trước, kèm bằng chứng (`git stash` rồi chạy lại)
 - Không sửa được → báo cáo nguyên trạng, để người dùng quyết
 
+## Tính năng có giao diện — kiểm đường vào, không chỉ kiểm route
+
+Test tự động trả `200` cho một route không chứng minh người dùng thật **tới được** route
+đó. Route đúng, layout đúng, test pass — nhưng nếu không có link nào từ màn hình mặc định
+sau đăng nhập dẫn tới nó, tính năng vô hình với người dùng dù mọi thứ "Đạt" trên giấy.
+
+Với bất kỳ tính năng nào có giao diện (không phải API thuần), việc chạy `verify-done` phải
+gồm một bước không thay bằng test tự động: đăng nhập bằng tài khoản thật của đúng vai trò,
+xuất phát từ màn hình mặc định sau đăng nhập — **không** gõ thẳng URL tính năng — và xác
+nhận có đường bấm tới được. Route test và feature test kiểm được "trang này hoạt động đúng
+khi tới nơi"; chúng không kiểm được "có tới nơi được không".
+
 ## Với việc không có test
 
 WordPress theme, thay đổi giao diện, script một lần — bằng chứng là **kết quả quan sát được**:
