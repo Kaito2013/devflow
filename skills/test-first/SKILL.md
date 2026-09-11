@@ -1,6 +1,6 @@
 ---
 name: test-first
-description: Viết test thất bại trước, rồi mới viết code cho nó pass. Dùng khi thêm tính năng hoặc sửa bug trong project có sẵn test (Laravel, Node, Flutter). Bỏ qua với theme WordPress.
+description: Write a failing test first, then code to make it pass ("test trước, code sau", "TDD"). Use when adding a feature or fixing a bug in a project that already has tests (Laravel, Node, Flutter). Skip for WordPress themes.
 ---
 
 # Test trước, code sau

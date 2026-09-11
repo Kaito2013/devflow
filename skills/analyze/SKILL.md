@@ -1,6 +1,6 @@
 ---
 name: analyze
-description: "Scan and index an existing codebase using codebase-memory-mcp (knowledge graph) and serena (LSP symbol intelligence) to build a structural knowledge graph, symbol index, and domain context in supercoders/CONTEXT.md."
+description: "Scan and index an existing codebase using codebase-memory-mcp (knowledge graph) and serena (LSP symbol intelligence) to build a structural knowledge graph, symbol index, and domain context in devflow/CONTEXT.md."
 ---
 
 # Codebase Analysis & Indexing (/devflow:analyze)
@@ -43,9 +43,9 @@ It coordinates **`codebase-memory-mcp`** (knowledge graph, architecture clusters
 
 ---
 
-### Step 3: Synthesize Knowledge into `supercoders/CONTEXT.md`
+### Step 3: Synthesize Knowledge into `devflow/CONTEXT.md`
 
-Always generate or update `supercoders/CONTEXT.md` with the extracted structural intelligence:
+Always generate or update `devflow/CONTEXT.md` with the extracted structural intelligence:
 
 ```markdown
 # Project Context & Domain Model
@@ -75,7 +75,7 @@ Always generate or update `supercoders/CONTEXT.md` with the extracted structural
 
 ### Step 4: Execution Handoff
 
-After generating/updating `supercoders/CONTEXT.md`, summarize the architectural findings concisely (2-4 bullet points) and offer the next step:
+After generating/updating `devflow/CONTEXT.md`, summarize the architectural findings concisely (2-4 bullet points) and offer the next step:
 
 1. **Grill on Feature/Refactor**: "Proceed to `/devflow:clarify-requirements` or `/devflow:clarify-requirements` to clarify new requirements."
 2. **Implementation Planning**: "Proceed to `/devflow:write-plan` to plan out tasks."

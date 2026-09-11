@@ -1,6 +1,6 @@
 ---
 name: write-plan
-description: Chia việc nhiều bước thành các task độc lập, mỗi task có tiêu chí kiểm chứng riêng. Dùng sau khi đã có spec hoặc yêu cầu rõ, trước khi chạm vào code. Xuất ra devflow/plans/.
+description: Split multi-step work ("lập kế hoạch") into independent tasks, each with its own verification criteria. Use once a spec or clear requirement exists, before touching code. Outputs into devflow/plans/.
 ---
 
 # Lập kế hoạch triển khai

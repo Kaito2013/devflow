@@ -1,6 +1,6 @@
 ---
 name: review-changes
-description: Review thay đổi code theo hai trục song song — đúng quy ước repo, và đúng spec. Dùng sau mỗi task trong subagent-execution, hoặc khi người dùng muốn review một nhánh, PR, diff.
+description: Review code changes along two parallel axes ("review code") — repo conventions, and spec compliance. Use after each task in subagent-execution, or when the user wants to review a branch, PR, or diff.
 ---
 
 # Review hai trục

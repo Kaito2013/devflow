@@ -1,6 +1,6 @@
 ---
 name: clarify-requirements
-description: Phỏng vấn làm rõ yêu cầu trước khi viết code. Dùng khi người dùng muốn xây tính năng mới, thêm module, đổi hành vi, hoặc đưa ý tưởng còn mơ hồ. Xuất ra spec trong devflow/specs/.
+description: Interview to clarify requirements before writing code ("làm rõ yêu cầu", "phỏng vấn"). Use when the user wants to build a new feature, add a module, change behavior, or brings a vague idea. Outputs a spec into devflow/specs/.
 ---
 
 # Làm rõ yêu cầu

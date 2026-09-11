@@ -1,6 +1,6 @@
 ---
 name: subagent-execution
-description: Thực thi kế hoạch bằng subagent — mỗi task một implementer, rồi một reviewer độc lập, có ledger sống sót qua compaction và vòng sửa giới hạn. Dùng khi đã có plan trong devflow/plans/ và môi trường có subagent.
+description: Execute a plan via subagents ("thực thi bằng subagent", "triển khai") — one implementer per task, then an independent reviewer, with a ledger that survives compaction and a bounded fix loop. Use once a plan exists in devflow/plans/ and the environment supports subagents.
 ---
 
 # Thực thi bằng subagent

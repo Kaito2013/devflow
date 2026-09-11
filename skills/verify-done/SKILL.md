@@ -1,6 +1,6 @@
 ---
 name: verify-done
-description: Cổng kiểm chứng cuối — chạy lệnh thật, đọc output thật, rồi mới được nói là xong. Dùng trước khi tuyên bố hoàn thành, trước khi commit, trước khi tạo PR.
+description: Final verification gate ("kiểm chứng trước khi xong") — run real commands, read real output, only then say it's done. Use before claiming completion, before committing, before opening a PR.
 ---
 
 # Kiểm chứng trước khi nói xong

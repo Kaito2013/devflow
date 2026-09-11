@@ -1,6 +1,6 @@
 ---
 name: isolate-worktree
-description: Đảm bảo việc thực thi bằng subagent diễn ra trong một workspace tách biệt, để một lần chạy hỏng không bao giờ làm bẩn nhánh mà người dùng đang xem. Dùng ở đầu subagent-execution, trước khi phát task đầu tiên.
+description: Ensure subagent execution happens in an isolated workspace ("cô lập worktree"), so a failed run never dirties the branch the user is looking at. Use at the start of subagent-execution, before dispatching the first task.
 ---
 
 # Cô lập workspace

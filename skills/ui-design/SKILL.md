@@ -1,6 +1,6 @@
 ---
 name: ui-design
-description: Cam kết một hướng thẩm mỹ cụ thể trước khi viết bất kỳ giao diện nào — tránh giao diện "mặc định AI" (form xám xếp chồng, gradient tím-trắng, font hệ thống). Dùng khi task tạo hoặc sửa trang, component, dashboard có người dùng thật nhìn thấy — Blade, Livewire, React, Vue, hay HTML/CSS thuần.
+description: Commit to one concrete aesthetic direction ("thiết kế giao diện") before writing any interface — avoid "default AI" UI (stacked gray forms, purple-white gradients, system fonts). Use when a task creates or edits a page, component, or dashboard a real user sees — Blade, Livewire, React, Vue, or plain HTML/CSS.
 ---
 
 # Thiết kế giao diện
