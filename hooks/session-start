@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# SessionStart hook for the devflow plugin.
+#
+# Without this, devflow/CLAUDE.md only ever gets read by Claude Code when the
+# working directory is the devflow repo itself -- a plugin's bundled CLAUDE.md
+# is NOT auto-loaded into other projects just because the plugin is enabled.
+# Confirmed by inspecting a real session transcript in a different project
+# with devflow enabled: only the global ~/.claude/CLAUDE.md and that project's
+# own ancestor CLAUDE.md were ever loaded, never this one. The four
+# cross-cutting principles (evidence before assertions, root-cause-first,
+# conditional test-first, no scope creep) were designed to need no invocation
+# specifically because they'd always be loaded -- they were not, until this
+# hook injects them explicitly.
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+claude_md_content=$(cat "${PLUGIN_ROOT}/CLAUDE.md" 2>&1 || echo "Error reading devflow/CLAUDE.md")
+
+sc_version="$(sed -n 's/.*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "${PLUGIN_ROOT}/plugin.json" | head -1)"
+sc_count="$(find "${PLUGIN_ROOT}/skills" -mindepth 2 -maxdepth 2 -name SKILL.md 2>/dev/null | wc -l | tr -d ' ')"
+banner="Devflow v${sc_version:-?} - ${sc_count:-?} skills loaded.\n\n"
+
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
+
+claude_md_escaped=$(escape_for_json "$claude_md_content")
+session_context="${banner}<EXTREMELY_IMPORTANT>\nThis project uses the devflow plugin. Below is the full content of devflow/CLAUDE.md -- follow it for every task, not only when a skill is invoked. The four principles in it apply whether or not any devflow skill gets called this turn.\n\n${claude_md_escaped}\n</EXTREMELY_IMPORTANT>"
+
+printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "SessionStart",\n    "additionalContext": "%s"\n  }\n}\n' "$session_context"
+
+exit 0
