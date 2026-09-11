@@ -57,6 +57,18 @@ xuất phát từ màn hình mặc định sau đăng nhập — **không** gõ 
 nhận có đường bấm tới được. Route test và feature test kiểm được "trang này hoạt động đúng
 khi tới nơi"; chúng không kiểm được "có tới nơi được không".
 
+## Tính năng có áp dụng `ui-design`
+
+Test tự động và việc "route trả về được" không kiểm được thẩm mỹ. Route đúng, không có
+`console.error`, đúng luồng — mà vẫn có thể là một trang không ai muốn dùng vì chỉ toàn
+input xám xếp chồng.
+
+Có Playwright MCP: chụp ảnh màn hình thật của trang vừa dựng, nhìn lại đối chiếu với hướng
+thẩm mỹ đã chọn ở `devflow:ui-design` Bước 1 — có đúng tông đã cam kết không, có rơi vào bốn
+mặc định cần tránh không (font hệ thống, gradient tím-trắng, cột dọc đơn điệu, không chi
+tiết). Không có Playwright MCP: tự mô tả những gì thấy được từ markup đã sinh, đối chiếu
+cùng bốn khoảng ở Bước 2 của `ui-design`.
+
 ## Với việc không có test
 
 WordPress theme, thay đổi giao diện, script một lần — bằng chứng là **kết quả quan sát được**:

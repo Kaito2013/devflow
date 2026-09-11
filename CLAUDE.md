@@ -59,6 +59,10 @@ bằng một câu, đừng tự sửa.
 **Chuỗi phát triển:** `clarify-requirements` `write-plan` `subagent-execution`
 `test-first` `review-changes` `verify-done`
 
+**Chất lượng giao diện:** `ui-design` — bắt buộc trước khi viết markup cho bất kỳ trang/
+component nào người dùng thật nhìn thấy. Không có bước này, kết quả mặc định là component
+thư viện xếp chồng, không màu, không phân cấp.
+
 **Hiểu codebase:** `analyze` `serena`
 
 **WordPress:** `wp-theme-converter` `wp-security-audit` `wp-responsive-check`

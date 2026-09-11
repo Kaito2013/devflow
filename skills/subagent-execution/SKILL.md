@@ -64,6 +64,10 @@ Trong prompt đưa đủ:
 - Nội dung task lấy nguyên từ plan (làm gì, file nào, kiểm chứng ra sao)
 - Đường dẫn spec và `CONTEXT.md` để nó tự đọc khi cần
 - Stack và dòng **Có test** từ plan — có thì yêu cầu chạy `devflow:test-first`
+- Nếu task tạo hoặc sửa giao diện (Blade, Livewire, React, Vue, HTML/CSS) mà người dùng thật
+  nhìn thấy: yêu cầu đọc `devflow:ui-design` trước khi viết markup. Không có bước này,
+  implementer mặc định xếp component thư viện theo thứ tự thẳng đứng, không màu, không
+  phân cấp — đúng thứ mà reviewer không bắt được vì test tự động không kiểm thẩm mỹ.
 - Yêu cầu trả về: file đã đổi, lệnh đã chạy, **output thật** của lệnh đó
 - **Không được tự phát subagent khác**, kể cả để tự review. Review là việc của điều phối,
   sau khi nhận báo cáo — subagent tự gọi reviewer chỉ tốn thêm một lượt vô nghĩa vì kết quả

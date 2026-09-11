@@ -43,6 +43,7 @@ clarify-requirements → write-plan → subagent-execution → review-changes �
 | `test-first` | Test đỏ trước, code sau — chỉ cho project có test |
 | `review-changes` | Hai reviewer song song: đúng quy ước repo, đúng spec |
 | `verify-done` | Chạy lệnh thật, dán output thật, rồi mới được nói xong |
+| `ui-design` | Cam kết hướng thẩm mỹ trước khi viết markup — tránh giao diện "mặc định AI" |
 
 ## Skill theo stack
 
