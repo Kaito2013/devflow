@@ -91,6 +91,11 @@ Có test: có / không   ← quyết định task có áp dụng test-first hay 
 Dòng **Có test** quan trọng: nó quyết định implementer có chạy `devflow:test-first` hay không. Theme
 WordPress ghi "không" — kiểm chứng bằng render thật thay vì unit test.
 
+Ghi file xong thì **commit ngay**, cùng với spec nếu spec đó chưa commit
+(`git add devflow/ && git commit -m "docs: add plan for <tên>"`). Lý do giống hệt spec: kế
+hoạch chưa commit thì không có mặt trong worktree mà `devflow:isolate-worktree` sắp tạo —
+implementer Task 1 sẽ không tìm thấy plan/spec dù bạn vừa viết xong.
+
 ## Bàn giao
 
 Kế hoạch xong thì báo: *"Kế hoạch đã lưu ở `devflow/plans/<file>.md`, gồm N task. Bắt đầu

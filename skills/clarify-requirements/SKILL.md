@@ -123,6 +123,12 @@ Những chỗ tự điền vì người dùng không chốt.
 Việc "Gọn" thì chốt bằng vài dòng ngay trong chat — không tạo file — rồi hỏi một câu duy
 nhất: *"Vậy được chưa, làm luôn?"*
 
+Ghi file xong thì **commit ngay** (`git add devflow/specs/<file>.md && git commit -m "docs:
+add spec for <tên>"`). Spec chưa commit là file vô hình với `devflow:isolate-worktree` — nó
+tạo nhánh mới từ git history, không phải từ working directory hiện tại, nên spec viết ra
+mà chưa commit sẽ không có mặt trong worktree, và `write-plan`/`subagent-execution` chạy sau
+đó sẽ không đọc được nó.
+
 ## Bàn giao
 
 Việc "Lớn": *"Spec đã lưu ở `devflow/specs/<file>.md`. Chuyển sang `devflow:write-plan`?"*

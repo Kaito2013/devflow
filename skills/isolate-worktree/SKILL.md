@@ -61,7 +61,19 @@ sau sẽ đưa nguyên workspace phụ vào repo chính.
 tạo worktree, làm tiếp ngay tại thư mục hiện tại, ghi vào ledger rằng lần chạy này **không**
 được cô lập.
 
-## Bước 2 — Cài đặt dự án trong workspace mới
+## Bước 2 — Sao chép file bị git ignore
+
+Worktree mới chỉ có đúng nội dung đã **commit** — mọi file bị `.gitignore` (config môi
+trường, artifact build) không tự có, dù cần thiết để app chạy được:
+
+```bash
+[ -f "$MAIN_REPO/.env" ] && cp "$MAIN_REPO/.env" .   # bắt buộc, app không khởi động nổi nếu thiếu
+```
+
+Không đoán còn thiếu gì khác — nếu Bước 3 (baseline) đỏ vì lý do liên quan tới file cấu hình
+hay artifact build, đó là dấu hiệu cần copy thêm, xem hướng dẫn ở Bước 3.
+
+## Bước 3 — Cài đặt và build dự án trong workspace mới
 
 Tự nhận diện theo stack, chạy đúng lệnh:
 
@@ -71,10 +83,22 @@ Tự nhận diện theo stack, chạy đúng lệnh:
 [ -f pubspec.yaml ]   && flutter pub get    # Flutter
 ```
 
+**Có Vite/webpack (kiểm bằng `[ -f vite.config.js ]` hoặc script `build` trong
+`package.json`): bắt buộc chạy thêm `npm run build`.** `public/build/manifest.json` cũng bị
+git ignore như `.env` — thiếu nó, mọi trang Blade có `@vite(...)` trả lỗi 500
+(`ViteManifestNotFoundException`), nhưng lỗi hiển thị ra ngoài qua Blade thường là một thông
+báo khác hẳn (`No hint path defined for [...]`) khiến dễ tưởng nhầm là lỗi view/namespace
+thay vì tra đúng gốc là thiếu manifest. Test lẻ (`--filter`) có thể vẫn pass trong khi cả
+suite fail hàng loạt — đây chính là dấu hiệu để nghi ngờ thiếu build, không phải lỗi code.
+
+```bash
+[ -f package.json ] && grep -q '"build"' package.json && npm run build
+```
+
 Theme/plugin WordPress đứng ngoài `subagent-execution` (xem phần Ngoại lệ trong đó) nên
 không cần bước này.
 
-## Bước 3 — Xác nhận baseline sạch trước khi bắt đầu
+## Bước 4 — Xác nhận baseline sạch trước khi bắt đầu
 
 Chạy test suite (nếu plan ghi **Có test: có**) **một lần**, trước khi phát Task 1:
 
@@ -82,11 +106,18 @@ Chạy test suite (nếu plan ghi **Có test: có**) **một lần**, trước k
 php artisan test / npm test / flutter test
 ```
 
-**Baseline đã đỏ sẵn** — đây là trường hợp hiếm hoi controller **nên hỏi thay vì tự quyết**:
-không phải vì phá huỷ hay ảnh hưởng ra ngoài phạm vi, mà vì không có cách nào tự phân biệt
-lỗi này với lỗi do task sau đó gây ra — mọi phát hiện của `review-changes` và `verify-done`
-từ giờ đều mơ hồ nếu không biết baseline vốn đã đỏ. Hỏi một câu: *"Baseline đang có N test
-fail trước khi bắt đầu — tiếp tục hay dừng lại kiểm tra?"*
+**Baseline đã đỏ sẵn — trước khi hỏi, tự loại trừ nguyên nhân do chính worktree gây ra.** So
+với kết quả chạy cùng lệnh ở checkout gốc: nếu checkout gốc sạch mà worktree đỏ, đây thường
+là hệ quả của Bước 2/3 làm chưa đủ (thiếu file bị ignore, thiếu build) chứ không phải baseline
+thật của dự án — root-cause trước khi kết luận. Dấu hiệu hay gặp: **nhiều test cùng fail vì
+một lỗi trông không liên quan gì tới bug thật** (ví dụ lỗi view/namespace trong khi gốc là
+thiếu Vite manifest) — đọc stack trace đầy đủ, đừng dừng ở dòng lỗi đầu tiên.
+
+Sau khi đã loại trừ nguyên nhân môi trường mà vẫn đỏ — đây là trường hợp hiếm hoi controller
+**nên hỏi thay vì tự quyết**: không phải vì phá huỷ hay ảnh hưởng ra ngoài phạm vi, mà vì
+không có cách nào tự phân biệt lỗi này với lỗi do task sau đó gây ra — mọi phát hiện của
+`review-changes` và `verify-done` từ giờ đều mơ hồ nếu không biết baseline vốn đã đỏ. Hỏi
+một câu: *"Baseline đang có N test fail trước khi bắt đầu — tiếp tục hay dừng lại kiểm tra?"*
 
 **Baseline sạch** → ghi vào ledger, sang phát Task 1.
 
