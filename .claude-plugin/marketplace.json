@@ -1,0 +1,15 @@
+{
+  "name": "devflow",
+  "owner": { "name": "Hoai Minh" },
+  "metadata": {
+    "description": "Marketplace nội bộ cho bộ skill devflow",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "devflow",
+      "source": "./",
+      "description": "Chuỗi phát triển tinh gọn + bộ skill WordPress."
+    }
+  ]
+}

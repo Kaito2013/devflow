@@ -1,0 +1,70 @@
+---
+name: verify-done
+description: Cổng kiểm chứng cuối — chạy lệnh thật, đọc output thật, rồi mới được nói là xong. Dùng trước khi tuyên bố hoàn thành, trước khi commit, trước khi tạo PR.
+---
+
+# Kiểm chứng trước khi nói xong
+
+Quy tắc một dòng: **không có output thì không có tuyên bố**.
+
+"Chắc là chạy được", "về logic thì đúng", "thay đổi này an toàn" — đều không phải bằng chứng.
+
+## Chạy gì
+
+Lấy lệnh từ plan (mục Kiểm chứng của từng task) hoặc từ cấu hình project:
+
+| Stack | Lệnh |
+|---|---|
+| Laravel | `php artisan test` · `php -l` file đã sửa |
+| Node | `npm test` · `npm run build` · `npm run lint` |
+| Flutter | `flutter test` · `flutter analyze` |
+| WordPress | `php -l` **mọi file đã sửa** · mở trang render thật |
+
+`php -l` với WordPress là bắt buộc chứ không phải tuỳ chọn: lỗi cú pháp trong `functions.php`
+làm trắng toàn site.
+
+## Cách báo cáo
+
+Dán output thật, không tóm tắt:
+
+```
+$ php artisan test
+  Tests:  24 passed (89 assertions)
+  Time:   1.42s
+```
+
+Đúng một lệnh mỗi dòng, kèm kết quả. Lệnh nào không chạy được thì nói rõ vì sao chưa chạy,
+đừng bỏ qua im lặng.
+
+## Khi có test fail
+
+Nói thẳng là fail. Dán output. Đừng viết "hầu hết test đã pass".
+
+Rồi chọn một:
+- Sửa được ngay → sửa, chạy lại, dán output mới
+- Không liên quan thay đổi này → nói rõ nó đã fail từ trước, kèm bằng chứng (`git stash` rồi chạy lại)
+- Không sửa được → báo cáo nguyên trạng, để người dùng quyết
+
+## Với việc không có test
+
+WordPress theme, thay đổi giao diện, script một lần — bằng chứng là **kết quả quan sát được**:
+
+- Mở trang thật, mô tả thấy gì
+- Chụp màn hình nếu có Playwright MCP
+- Kiểm tra console trình duyệt không có lỗi
+- Với responsive: gọi `devflow:wp-responsive-check`
+
+"Tôi đã sửa CSS" không phải bằng chứng. "Mở trang, nút giờ nằm giữa, console sạch" mới là.
+
+## Checklist trước khi tuyên bố xong
+
+- [ ] Đã chạy lệnh test/build, đã dán output
+- [ ] Test fail đã nêu rõ, không giấu
+- [ ] Mọi tiêu chí nghiệm thu trong spec đã đối chiếu từng cái
+- [ ] Việc bị bỏ dở đã nói rõ là bỏ dở và vì sao
+- [ ] Không có file tạm, `console.log`, `dd()`, `var_dump()` sót lại
+
+## Việc làm chưa xong
+
+Làm được 3/5 task thì báo 3/5, kèm lý do 2 task còn lại chưa xong. Đừng báo "đã hoàn thành"
+rồi liệt kê phần thiếu ở cuối — người đọc dừng ở dòng đầu.

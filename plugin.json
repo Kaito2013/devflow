@@ -1,0 +1,7 @@
+{
+  "name": "devflow",
+  "version": "1.0.0",
+  "description": "Bộ skill phát triển tinh gọn: chuỗi clarify → plan → execute → review → verify, cộng bộ skill WordPress.",
+  "author": { "name": "Hoai Minh" },
+  "skills": "./skills/"
+}
