@@ -17,6 +17,13 @@ không bao giờ vào context chính.
 Đây cũng là lý do reviewer phải là agent **riêng**: reviewer dùng chung context với người viết
 sẽ thấy code "hợp lý" vì nó vừa tự nghĩ ra logic đó.
 
+## Cô lập trước khi bắt đầu
+
+Trước bất kỳ bước nào dưới đây, gọi `devflow:isolate-worktree` — trừ khi đang chuyển đổi
+theme WordPress (xem Ngoại lệ cuối bài, đứng ngoài toàn bộ quy trình này). Một lần chạy SDD
+hỏng giữa chừng không được phép làm bẩn nhánh mà người dùng đang xem; đây là điều kiện tiên
+quyết, không phải tuỳ chọn.
+
 ## Ledger — sống sót qua compaction
 
 Trí nhớ hội thoại không sống sót qua compaction. Một controller mất dấu sẽ phát lại từ đầu
@@ -143,3 +150,7 @@ vào nhau (header, footer, functions.php đều liên quan), chia nhỏ ra chỉ
 
 Hết task thì gọi `verify-done` để chạy kiểm chứng toàn bộ, rồi báo cáo: số task, file đã đổi,
 các mục đã `parked` kèm ruling, lệnh kiểm chứng và output.
+
+Nếu đã chạy trong worktree cô lập (`devflow:isolate-worktree`): báo thêm đường dẫn worktree
+và tên nhánh, hỏi người dùng muốn merge, mở PR, hay để lại xem thủ công — merge vào nhánh
+chung là hành động ảnh hưởng ra ngoài phạm vi, một trong bốn điều buộc dừng, không tự làm.

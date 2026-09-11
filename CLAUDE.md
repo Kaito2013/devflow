@@ -56,7 +56,7 @@ bằng một câu, đừng tự sửa.
 
 ## Danh mục skill
 
-**Chuỗi phát triển:** `clarify-requirements` `write-plan` `subagent-execution`
+**Chuỗi phát triển:** `clarify-requirements` `write-plan` `isolate-worktree` `subagent-execution`
 `test-first` `review-changes` `verify-done`
 
 **Chất lượng giao diện:** `ui-design` — bắt buộc trước khi viết markup cho bất kỳ trang/

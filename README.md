@@ -39,6 +39,7 @@ clarify-requirements → write-plan → subagent-execution → review-changes �
 | :--- | :--- |
 | `clarify-requirements` | Phỏng vấn làm rõ yêu cầu, xuất spec vào `devflow/specs/` |
 | `write-plan` | Chia task độc lập, mỗi task có tiêu chí kiểm chứng, xuất `devflow/plans/` |
+| `isolate-worktree` | Cô lập workspace trước khi chạy subagent — một lần chạy hỏng không làm bẩn nhánh đang xem |
 | `subagent-execution` | Mỗi task một implementer + một reviewer độc lập, giữ context chính sạch |
 | `test-first` | Test đỏ trước, code sau — chỉ cho project có test |
 | `review-changes` | Hai reviewer song song: đúng quy ước repo, đúng spec |
