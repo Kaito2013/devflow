@@ -100,6 +100,10 @@ Ghi spec vào `devflow/specs/YYYY-MM-DD-<tên>-spec.md`:
 ```markdown
 # <Tên tính năng>
 
+Stack: Laravel | Node | WordPress | Flutter
+Có test: có / không
+Có UI: có / không
+
 ## Bối cảnh
 Vì sao cần. Một đoạn.
 
@@ -125,13 +129,14 @@ nhất: *"Vậy được chưa, làm luôn?"*
 
 Ghi file xong thì **commit ngay** (`git add devflow/specs/<file>.md && git commit -m "docs:
 add spec for <tên>"`). Spec chưa commit là file vô hình với `devflow:isolate-worktree` — nó
-tạo nhánh mới từ git history, không phải từ working directory hiện tại, nên spec viết ra
-mà chưa commit sẽ không có mặt trong worktree, và `write-plan`/`subagent-execution` chạy sau
-đó sẽ không đọc được nó.
+tạo nhánh mới từ git history, không phải từ working directory hiện tại.
 
 ## Bàn giao
 
-Việc "Lớn": *"Spec đã lưu ở `devflow/specs/<file>.md`. Chuyển sang `devflow:write-plan`?"*
-
-Việc "Gọn" đã được gật đầu: bắt tay làm ngay trong quy trình bình thường, không cần
-`write-plan` hay subagent riêng — chỉ việc "Lớn" mới đi hết chuỗi.
+- **Việc "Lớn":** *"Spec đã lưu ở `devflow/specs/<file>.md`. Chuyển sang `devflow:write-plan`?"*
+- **Việc "Gọn" đã được gật đầu:** Thực hiện ngay theo **mini-flow** trong session hiện tại, không cần file spec/plan rườm rà hay subagent:
+  1. Nếu có test suite: chạy `devflow:test-first`. Nếu đụng giao diện: đọc nhanh `devflow:ui-design`.
+  2. Sửa code tối thiểu.
+  3. Gọi `devflow:verify-done` (chạy lệnh test/lint thật, dán output).
+  4. Commit code.
+- **Sửa Bug phức tạp:** Trước khi sửa, bắt buộc tái hiện lỗi bằng một lệnh test đỏ hoặc curl, cô lập nguyên nhân gốc trong code, rồi đi qua mini-flow trên.

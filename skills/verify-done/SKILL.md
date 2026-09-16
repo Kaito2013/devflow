@@ -11,11 +11,11 @@ Quy tắc một dòng: **không có output thì không có tuyên bố**.
 
 ## Chạy gì
 
-Lấy lệnh từ plan (mục Kiểm chứng của từng task) hoặc từ cấu hình project:
+Lấy lệnh từ plan (mục Kiểm chứng của từng task) hoặc từ cấu hình project. Nếu đang ở trong worktree cô lập (`WORKTREE_PATH`), chạy lệnh tại thư mục worktree đó:
 
 | Stack | Lệnh |
 |---|---|
-| Laravel | `php artisan test` · `php -l` file đã sửa |
+| Laravel | `php artisan test` · `php -l` file đã sửa · `[ -f vendor/bin/pint ] && vendor/bin/pint --test` |
 | Node | `npm test` · `npm run build` · `npm run lint` |
 | Flutter | `flutter test` · `flutter analyze` |
 | WordPress | `php -l` **mọi file đã sửa** · mở trang render thật |

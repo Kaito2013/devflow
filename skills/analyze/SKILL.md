@@ -3,79 +3,75 @@ name: analyze
 description: "Scan and index an existing codebase using codebase-memory-mcp (knowledge graph) and serena (LSP symbol intelligence) to build a structural knowledge graph, symbol index, and domain context in devflow/CONTEXT.md."
 ---
 
-# Codebase Analysis & Indexing (/devflow:analyze)
+# Phân tích & Quét kiến trúc Codebase (/devflow:analyze)
 
-Use this skill when onboarding to an existing codebase, when exploring unfamiliar code, or when the user invokes `/devflow:analyze`.
+Sử dụng skill này khi mới tiếp nhận một dự án có sẵn, khi khám phá vùng code xa lạ, hoặc khi người dùng gõ `/devflow:analyze`.
 
-It coordinates **`codebase-memory-mcp`** (knowledge graph, architecture clusters, hub/bridge analysis) and **`serena`** (LSP symbol extraction, callers, type diagnostics) to deeply understand the architecture without burning tokens on brute-force file scanning.
+Mục tiêu: hiểu sâu kiến trúc hệ thống và sinh file `devflow/CONTEXT.md` mà **không tốn token quét vét file hàng loạt**.
 
-**Announce at start:** "🔍 /devflow:analyze — Indexing codebase with codebase-memory-mcp & serena..."
-
----
-
-## 🛠️ Step-by-Step Workflow
-
-### Step 1: Structural Knowledge Graph Indexing (`codebase-memory-mcp`)
-
-1. **Check Index Status or Trigger Indexing**:
-   - Call `codebase-memory-mcp:index_status` or `codebase-memory-mcp:index_repository`.
-   - Ensure the repository is indexed locally.
-
-2. **Extract Architecture & Topology**:
-   - Call `codebase-memory-mcp:get_architecture` to understand directory clustering and community structures.
-   - Call `codebase-memory-mcp:search_graph` to locate core services, repositories, controllers, or entry points.
-   - Identify hub nodes and bridge files (high blast-radius areas).
+**Thông báo khi bắt đầu:** "🔍 /devflow:analyze — Đang phân tích kiến trúc codebase..."
 
 ---
 
-### Step 2: LSP Symbol Navigation & Memory (`serena`)
+## 🛠️ Quy trình thực hiện
 
-1. **Initialize Serena**:
-   - Call `serena:initial_instructions` (or `mcp__serena__initial_instructions`) to bootstrap Serena's project context.
-   - Call `serena:activate_project` (or `mcp__serena__activate_project`).
+### Bước 1: Khám phá cấu trúc
 
-2. **Extract Top-Level Symbols Overview**:
-   - Call `serena:get_symbols_overview` (or `mcp__serena__get_symbols_overview`) to get top-level classes, methods, and types.
-   - For key symbols identified in Step 1, call `serena:find_referencing_symbols` to see callers and call sites.
+#### Phương án A: Có MCP (`codebase-memory-mcp` & `serena`)
+1. **Kiểm tra đồ thị tri thức (`codebase-memory-mcp`)**:
+   - Gọi `codebase-memory-mcp:index_status` hoặc `codebase-memory-mcp:index_repository`.
+   - Gọi `codebase-memory-mcp:get_architecture` để hiểu các cụm thư mục và ranh giới module.
+   - Gọi `codebase-memory-mcp:search_graph` định vị các hub/bridge files (những file có bán kính ảnh hưởng lớn).
+2. **Trích xuất Symbol bằng LSP (`serena`)**:
+   - Gọi `serena:initial_instructions` và `serena:activate_project`.
+   - Gọi `serena:get_symbols_overview` để nắm các class, method, type cốt lõi.
+   - Gọi `serena:find_referencing_symbols` cho các service quan trọng.
 
-3. **Check Diagnostics (if applicable)**:
-   - If analyzing specific problematic files, call `serena:get_diagnostics_for_file` for IDE-level error detection.
+#### Phương án B: Fallback khi không có MCP (Native Inspection)
+Nếu môi trường chưa cài đặt MCP, tự động chuyển sang đọc file cấu hình hệ thống:
+1. **Xác định Stack & Dependencies**:
+   - Đọc `composer.json` (Laravel/PHP), `package.json` (Node), `pubspec.yaml` (Flutter), hoặc `style.css` (WordPress).
+   - Xác định phiên bản framework, ORM, thư viện xác thực, test runner.
+2. **Quét thư mục cốt lõi**:
+   - Quét entry points: `routes/` (Laravel), `src/` hoặc `routes/` (Node), `lib/main.dart` (Flutter), `functions.php` (WordPress).
+   - Quét Data Models: `app/Models/` (Laravel), `src/models/` hoặc Prisma schema (Node).
+3. **Định vị Test Seam**:
+   - Kiểm tra `tests/` hoặc script test trong `package.json`.
 
 ---
 
-### Step 3: Synthesize Knowledge into `devflow/CONTEXT.md`
+### Bước 2: Tổng hợp tri thức vào `devflow/CONTEXT.md`
 
-Always generate or update `devflow/CONTEXT.md` with the extracted structural intelligence:
+Luôn tạo hoặc cập nhật file `devflow/CONTEXT.md` theo cấu trúc chuẩn:
 
 ```markdown
-# Project Context & Domain Model
+# Bối cảnh dự án & Mô hình nghiệp vụ
 
-## 1. System Overview & Tech Stack
-- **Framework/Runtime**: [e.g. Laravel 11 / PHP 8.3 / MySQL]
-- **Key Dependencies**: [e.g. Sanctum, Pest, Tailwind]
+## 1. Tổng quan hệ thống & Tech Stack
+- **Framework/Runtime**: [Ví dụ: Laravel 11 / PHP 8.3 / MySQL]
+- **Thư viện chính**: [Ví dụ: Sanctum, Livewire, Tailwind]
 
-## 2. Ubiquitous Domain Vocabulary (Glossary)
-- **<Concept A>**: [Definition, role in domain]
-- **<Concept B>**: [Definition, role in domain]
+## 2. Từ điển thuật ngữ nghiệp vụ (Glossary)
+- **<Thuật ngữ A>**: [Ý nghĩa, vai trò trong hệ thống]
+- **<Thuật ngữ B>**: [Ý nghĩa, vai trò trong hệ thống]
 
-## 3. Core Architecture & Module Boundaries
-- **Entry Points**: [HTTP Controllers / Console Commands / Jobs]
-- **Domain/Service Layer**: [Services, Actions, Repositories]
-- **Data Models**: [Eloquent Models, DB Schema entities]
+## 3. Ranh giới kiến trúc & Module cốt lõi
+- **Điểm vào (Entry Points)**: [HTTP Controllers / Console Commands / API Routes]
+- **Tầng nghiệp vụ (Domain/Service)**: [Services, Actions, Repositories]
+- **Thực thể dữ liệu (Data Models)**: [Eloquent Models, DB Tables chính]
 
-## 4. Hub & Bridge Files (High Blast Radius)
-- `path/to/HubFile.php`: [Why it is critical, dependencies count]
+## 4. Các file trọng yếu (Hub & Bridge Files)
+- `path/to/HubFile.php`: [Vì sao quan trọng, mức độ ảnh hưởng nếu sửa]
 
-## 5. Verification & Test Seams
-- **Test Runner**: `php artisan test` (or `npm test`, `pytest`)
-- **Key Test Files**: `tests/Feature/...`, `tests/Unit/...`
+## 5. Điểm kiểm chứng & Hạ tầng Test
+- **Lệnh chạy test**: `php artisan test` (hoặc `npm test`, `flutter test`)
+- **File test mẫu**: `tests/Feature/...`, `tests/Unit/...`
 ```
 
 ---
 
-### Step 4: Execution Handoff
+### Bước 3: Bàn giao
 
-After generating/updating `devflow/CONTEXT.md`, summarize the architectural findings concisely (2-4 bullet points) and offer the next step:
-
-1. **Grill on Feature/Refactor**: "Proceed to `/devflow:clarify-requirements` or `/devflow:clarify-requirements` to clarify new requirements."
-2. **Implementation Planning**: "Proceed to `/devflow:write-plan` to plan out tasks."
+Sau khi tạo/cập nhật `devflow/CONTEXT.md`, tóm tắt 2–3 điểm kiến trúc đáng chú ý và gợi ý bước tiếp theo:
+1. **Làm rõ yêu cầu mới:** Chuyển sang `/devflow:clarify-requirements`.
+2. **Lập kế hoạch làm việc:** Chuyển sang `/devflow:write-plan`.

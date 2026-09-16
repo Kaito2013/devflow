@@ -68,27 +68,26 @@ subagent cho N việc giống hệt nhau.
 
 Trong prompt đưa đủ:
 
+- **Thư mục làm việc (`WORKTREE_PATH`):** Nếu đã chạy `isolate-worktree`, chỉ rõ: *"Thư mục làm việc là `<WORKTREE_PATH>`. Toàn bộ thao tác file và lệnh test/build phải thực hiện trong thư mục này, không thao tác ngoài root."*
 - Nội dung task lấy nguyên từ plan (làm gì, file nào, kiểm chứng ra sao)
 - Đường dẫn spec và `CONTEXT.md` để nó tự đọc khi cần
 - Stack và dòng **Có test** từ plan — có thì yêu cầu chạy `devflow:test-first`
-- Nếu task tạo hoặc sửa giao diện (Blade, Livewire, React, Vue, HTML/CSS) mà người dùng thật
-  nhìn thấy: yêu cầu đọc `devflow:ui-design` trước khi viết markup. Không có bước này,
-  implementer mặc định xếp component thư viện theo thứ tự thẳng đứng, không màu, không
-  phân cấp — đúng thứ mà reviewer không bắt được vì test tự động không kiểm thẩm mỹ.
+- Nếu task có tag `[UI]` hoặc tạo/sửa giao diện (Blade, Livewire, React, Vue, HTML/CSS) mà người dùng thật
+  nhìn thấy: yêu cầu đọc `devflow:ui-design` trước khi viết markup.
+- **Quy tắc Git:** Implementer **tuyệt đối không tự chạy `git commit`**. Chỉ sửa code và chạy lệnh kiểm chứng.
 - Yêu cầu trả về: file đã đổi, lệnh đã chạy, **output thật** của lệnh đó
 - **Không được tự phát subagent khác**, kể cả để tự review. Review là việc của điều phối,
-  sau khi nhận báo cáo — subagent tự gọi reviewer chỉ tốn thêm một lượt vô nghĩa vì kết quả
-  đó không được tính.
+  sau khi nhận báo cáo.
 
 ### 2. Kiểm trước khi review
 
 Đọc báo cáo của implementer. Nó có dán output lệnh không? Output đó có thật sự pass không?
 Không có bằng chứng thì phát lại, đừng chuyển sang reviewer.
 
-### 3. Reviewer
+### 3. Reviewer nội bộ task
 
-Gọi `devflow:review-changes` cho diff của task này. Reviewer nhận: nội dung task, tiêu chí nghiệm
-thu, và diff — **không** nhận lịch sử hội thoại của implementer.
+Để tinh gọn token và tránh trễ, **mỗi task trong SDD chỉ dùng 1 Reviewer tích hợp** (không phát 2 subagent cho một task nhỏ).
+Chỉ định Reviewer nhận: nội dung task, tiêu chí nghiệm thu, và diff chưa commit (`git diff HEAD`). Reviewer soi cả hai tiêu chí: (1) Tuân thủ spec và (2) Sạch sẽ, đúng quy ước code.
 
 Không đạt thì vào **vòng sửa**, tối đa **3 vòng** cho một task:
 
@@ -98,7 +97,7 @@ Không đạt thì vào **vòng sửa**, tối đa **3 vòng** cho một task:
   — một vòng lặp sống sót 2 lần thử thường là implementer không thấy được vấn đề của chính
   mình, cần góc nhìn mới.
 
-Sau mỗi vòng, ghi ledger: `Task N: fix round R/3 (X đạt, Y còn) — commit <hash>`.
+Sau mỗi vòng, ghi ledger: `Task N: fix round R/3 (X đạt, Y còn)`.
 
 **Hết 3 vòng mà vẫn còn phát hiện** — dừng phát subagent, tự phân xử từng phát hiện còn lại:
 
@@ -108,7 +107,16 @@ Sau mỗi vòng, ghi ledger: `Task N: fix round R/3 (X đạt, Y còn) — commi
 | Đúng nhưng không ai phụ thuộc vào chỗ đó | Ghi `parked`, đi tiếp |
 | Đúng và có task sau phụ thuộc vào chỗ này | Đây là lý do duy nhất dừng hẳn để hỏi người dùng |
 
-Chỉ đóng task khi reviewer trả `Đạt`, hoặc bạn đã tự phân xử và ghi ledger.
+### 4. Đóng task & Commit
+
+Chỉ khi reviewer trả `Đạt`, hoặc bạn đã tự phân xử `parked` hợp lệ:
+1. **Controller thực hiện commit** tại worktree:
+   ```bash
+   git add -A && git commit -m "feat(task-<N>): <mô tả ngắn gọn công việc>"
+   ```
+2. Lấy commit hash (`git rev-parse --short HEAD`) và ghi vào ledger:
+   `Task N: complete — commit <hash>`
+3. Đóng task, chuyển sang task kế tiếp.
 
 ## Khi nào tự quyết, khi nào dừng hỏi
 
@@ -146,11 +154,13 @@ chờ vẫn rẻ hơn dọn xung đột.
 vào nhau (header, footer, functions.php đều liên quan), chia nhỏ ra chỉ tốn thêm. Dùng
 `wp-theme-converter` với quy trình theo đợt của nó.
 
-## Kết thúc
+## Kết thúc & Bàn giao
 
 Hết task thì gọi `verify-done` để chạy kiểm chứng toàn bộ, rồi báo cáo: số task, file đã đổi,
 các mục đã `parked` kèm ruling, lệnh kiểm chứng và output.
 
-Nếu đã chạy trong worktree cô lập (`devflow:isolate-worktree`): báo thêm đường dẫn worktree
-và tên nhánh, hỏi người dùng muốn merge, mở PR, hay để lại xem thủ công — merge vào nhánh
-chung là hành động ảnh hưởng ra ngoài phạm vi, một trong bốn điều buộc dừng, không tự làm.
+Nếu đã chạy trong worktree cô lập (`devflow:isolate-worktree`): báo đường dẫn worktree,
+tên nhánh, và hỏi người dùng muốn làm gì tiếp theo:
+1. **Merge vào nhánh chính:** Hướng dẫn chạy `git checkout <nhánh-gốc> && git merge --no-ff <tên-nhánh>`
+2. **Dọn dẹp worktree:** Hướng dẫn dọn dẹp bằng `git worktree remove .worktrees/<tên-nhánh> --force` và `git branch -d <tên-nhánh>`
+3. **Mở PR hoặc giữ lại:** Giữ nguyên worktree để kiểm tra thủ công.

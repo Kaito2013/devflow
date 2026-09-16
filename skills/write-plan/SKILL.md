@@ -68,6 +68,12 @@ Hai task cùng ghi một file thì **không** song song được, kể cả khi 
 Trường hợp hay gặp: nhiều task cùng thêm route vào một file, cùng đăng ký service provider,
 cùng tạo một partial dùng chung. Gộp lại thành một task, hoặc đẩy phần chung lên task thân.
 
+## Khi nào ghi ADR (Architectural Decision Record)
+
+Khi kế hoạch chứa một **quyết định kỹ thuật khó đảo ngược** (chọn cơ chế Auth, thư viện State Management, kiến trúc lưu file S3 vs Local, chọn DB Engine, đổi cấu trúc schema lớn):
+- Tạo một file tại `devflow/adr/NNNN-<tên-quyết-định>.md` (dựa theo mẫu `devflow/adr/0000-template.md`).
+- Ghi rõ: lý do chọn, các phương án đã loại bỏ, và cái giá phải trả (trade-offs). Điều này ngăn AI ở các phiên sau tự ý đổi kiến trúc.
+
 ## Định dạng file
 
 Ghi vào `devflow/plans/YYYY-MM-DD-<tên>-plan.md`:
@@ -79,27 +85,37 @@ Spec: devflow/specs/<file>.md
 Stack: Laravel | Node | WordPress | Flutter
 Có test: có / không   ← quyết định task có áp dụng test-first hay không
 
-## Task 1 — <tên ngắn>
+## Task 1 [Backend] — <tên ngắn>
 **Làm gì:** ...
 **File đụng tới:** `path/a.php`, `path/b.php`
 **Phụ thuộc:** không / Task N
 **Kiểm chứng:** lệnh cụ thể, hoặc thao tác cụ thể và kết quả mong đợi
 
-## Task 2 — ...
+## Task 2 [UI] — <tên màn hình>
+**Làm gì:** ...
+**File đụng tới:** `resources/views/...`
+**Phụ thuộc:** Task 1
+**Kiểm chứng:** thao tác bấm từ menu điều hướng, ảnh chụp màn hình hoặc render thật
 ```
 
-Dòng **Có test** quan trọng: nó quyết định implementer có chạy `devflow:test-first` hay không. Theme
-WordPress ghi "không" — kiểm chứng bằng render thật thay vì unit test.
+**Quy tắc gắn nhãn task:**
+- Gắn nhãn `[UI]` cho mọi task đụng đến giao diện mà người dùng nhìn thấy (Blade, Livewire, React, Vue, Flutter UI, HTML/CSS). `subagent-execution` sẽ tự động yêu cầu implementer đọc `devflow:ui-design` trước khi viết markup.
+- Gắn nhãn `[Backend]` hoặc `[DB/Migration]` cho logic nghiệp vụ, schema, API.
+- Dòng **Có test** quan trọng: nó quyết định implementer có chạy `devflow:test-first` hay không.
 
 Ghi file xong thì **commit ngay**, cùng với spec nếu spec đó chưa commit
-(`git add devflow/ && git commit -m "docs: add plan for <tên>"`). Lý do giống hệt spec: kế
-hoạch chưa commit thì không có mặt trong worktree mà `devflow:isolate-worktree` sắp tạo —
-implementer Task 1 sẽ không tìm thấy plan/spec dù bạn vừa viết xong.
+(`git add devflow/ && git commit -m "docs: add plan for <tên>"`). Kế
+hoạch chưa commit thì không có mặt trong worktree mà `devflow:isolate-worktree` sắp tạo.
 
 ## Bàn giao
 
 Kế hoạch xong thì báo: *"Kế hoạch đã lưu ở `devflow/plans/<file>.md`, gồm N task. Bắt đầu
 triển khai bằng subagent?"*
 
-Người dùng đồng ý → gọi `devflow:subagent-execution`. Đây là đường đi mặc định khi môi trường có
-subagent. Không có subagent thì nói rõ và làm tuần tự, review sau mỗi task.
+- **Môi trường có subagent:** Người dùng đồng ý → gọi `devflow:isolate-worktree` rồi chuyển sang `devflow:subagent-execution`.
+- **Môi trường không có subagent (hoặc người dùng muốn chạy trong session hiện tại):** Làm tuần tự từng task:
+  1. Với mỗi task: chạy `devflow:test-first` (nếu có test) hoặc `devflow:ui-design` (nếu là task `[UI]`).
+  2. Viết code tối thiểu để hoàn thành task.
+  3. Tự kiểm tra lệnh ở mục **Kiểm chứng**, chạy linter.
+  4. Commit task (`git commit -m "feat(task-<N>): ..."`).
+  5. Hết các task thì gọi `devflow:verify-done` để nghiệm thu toàn bộ.

@@ -3,20 +3,25 @@ name: serena
 description: "Serena code intelligence — LSP-powered symbol navigation, diagnostics, and targeted code surgery. Activate before complex refactors, cross-file analysis, or when graph tools need symbol-level depth."
 ---
 
-# Serena LSP Code Intelligence
+# Serena — Điều hướng Code bằng LSP (/devflow:serena)
 
-Activate Serena MCP for LSP-powered code intelligence: symbol navigation, type diagnostics, and safe code surgery.
+Kích hoạt Serena MCP để khai thác trí thông minh code chuẩn LSP: điều hướng symbol, chẩn đoán kiểu dữ liệu (diagnostics), và sửa code chính xác theo cấu trúc AST.
 
-**CRITICAL:** Call `initial_instructions` first when starting any Serena work — it loads the Serena project context.
+**BẮT BUỘC:** Luôn gọi `initial_instructions` trước tiên khi bắt đầu phiên làm việc với Serena.
 
-## Setup & Initialization
+## Khởi tạo & Cấu hình
 
-1. **Load instructions**: `initial_instructions()`
-2. **Activate project**: `activate_project()`
-3. **Get overview**: `get_symbols_overview()`
+1. **Nạp hướng dẫn**: `serena:initial_instructions()`
+2. **Kích hoạt project**: `serena:activate_project()`
+3. **Lấy tổng quan symbol**: `serena:get_symbols_overview()`
 
-## Tool Capabilities
-- `find_symbol`, `find_declaration`, `find_implementations`, `find_referencing_symbols`
-- `get_diagnostics_for_file` (type errors, warnings)
-- `replace_symbol_body`, `insert_after_symbol`, `insert_before_symbol`, `rename_symbol`
-- `write_memory`, `read_memory`
+## Khi nào dùng Serena vs Native Tools
+
+- **Dùng Serena khi:** Cần tìm chính xác định nghĩa/triển khai của interface (`find_declaration`, `find_implementations`), tìm toàn bộ nơi gọi hàm xuyên qua nhiều file (`find_referencing_symbols`), đổi tên symbol an toàn (`rename_symbol`), hoặc sửa đúng thân hàm (`replace_symbol_body`).
+- **Dùng Native Tools (`grep_search`, `find_by_name`, `view_file`) khi:** Tìm chuỗi text đơn thuần, tìm file theo tên, đọc nhanh một đoạn code ngắn hoặc khi MCP Serena không khả dụng trong môi trường.
+
+## Các công cụ chính
+- **Điều hướng:** `find_symbol`, `find_declaration`, `find_implementations`, `find_referencing_symbols`
+- **Chẩn đoán:** `get_diagnostics_for_file` (phát hiện lỗi type, syntax warning cấp độ IDE)
+- **Thao tác code:** `replace_symbol_body`, `insert_after_symbol`, `insert_before_symbol`, `rename_symbol`
+- **Bộ nhớ:** `write_memory`, `read_memory`

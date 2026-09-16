@@ -3,13 +3,15 @@ name: wp-responsive-check
 description: Use when testing or auditing responsive design, mobile layout, touch targets, and visual fidelity on WordPress themes or web frontends using Playwright MCP across multiple breakpoints
 compatibility: Works with Playwright MCP browser tools or Chrome DevTools MCP
 metadata:
-  author: supercoders
-  version: "1.0"
+  author: devflow
+  version: "1.1"
 ---
 
 # WordPress Responsive & Visual Audit (Playwright MCP)
 
-Quy trình tự động hóa kiểm tra tính thích ứng (Responsive Design), bố cục di động và trải nghiệm hiển thị của WordPress Theme trên mọi kích thước màn hình bằng công cụ **Playwright MCP**.
+Quy trình tự động hóa kiểm tra tính thích ứng (Responsive Design), bố cục di động và trải nghiệm hiển thị của WordPress Theme trên mọi kích thước màn hình bằng công cụ **Playwright MCP** (hoặc Chrome DevTools MCP).
+
+> **Phương án Fallback khi không có MCP:** Nếu môi trường chưa cài Playwright/Chrome MCP, chuyển sang phân tích CSS tĩnh (quét thẻ `img` có `max-width: 100%`, các media queries `< 576px`, `clamp()`) và hướng dẫn người dùng mở Chrome DevTools kiểm tra trực quan tại 3 mốc 320px, 375px, 768px.
 
 ---
 

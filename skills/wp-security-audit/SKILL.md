@@ -4,9 +4,9 @@ description: Comprehensive WordPress plugin/theme security and code quality audi
 compatibility: WordPress plugins and themes. Requires PHP files.
 metadata:
   author: lucas (DevVN)
-  curated_by: supercoders
-  version: "2.0"
-source: lucas (DevVN) / supercoders
+  curated_by: devflow
+  version: "2.1"
+source: lucas (DevVN)
 ---
 
 # DevVN WordPress Security & Code Quality Audit
