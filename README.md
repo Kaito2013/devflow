@@ -14,17 +14,6 @@
 
 ---
 
-## 🎯 Vì sao có `devflow`?
-
-Trong hệ sinh thái Claude Code & AI Coding Agents, bộ `supercoders` gom 56 skill từ hai upstream (`mattpocock/skills`, `obra/superpowers`) qua git submodule. Cơ chế đồng bộ cồng kềnh đó sinh hàng loạt vấn đề:
-- 💥 **Dễ mất code:** Script `sync.py` tự động xoá sạch các skill WordPress tùy biến mỗi lần kéo code.
-- 📉 **Lãng phí Token:** Always-on ngốn tới **~3.345 token**, làm thu hẹp ngữ cảnh suy luận (Smart Zone) của mô hình.
-- ⚠️ **Quá tải thao tác:** Đo trên 19 phiên làm việc thực tế: **21 lần gõ lệnh quản lý plugin** so với chỉ **5 lần thực sự gọi skill**.
-
-**`devflow` ra đời để thay đổi điều đó:** Viết mới toàn bộ phần quy trình, không submodule, không upstream CI, cô lập an toàn bằng Git Worktree và gom các nguyên tắc cốt lõi vào `CLAUDE.md`.
-
----
-
 <a name="benchmark"></a>
 ## ⚡ So sánh Benchmark: `devflow` vs `supercoders`
 
