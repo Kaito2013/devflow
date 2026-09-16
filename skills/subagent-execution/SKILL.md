@@ -59,8 +59,12 @@ mô tả của một task tự mâu thuẫn — ghi vào ledger đã kiểm tra 
 
 ### 1. Implementer
 
-Gọi `Agent` với `subagent_type: general-purpose`. Đưa **một** task mỗi lần — gộp nhiều task
-vào một subagent quay lại đúng vấn đề context mà cơ chế này sinh ra để tránh.
+Phát subagent Implementer theo môi trường hiện tại:
+- **Claude Code:** Gọi `Agent` với `subagent_type: general-purpose`.
+- **Antigravity (AGY):** Gọi `invoke_subagent` với `TypeName: "self"`, `Role: "Task Implementer"`, `Model: "inherit"` (hoặc `flash` cho task nhỏ).
+- **Codex / Single-Agent Harness (Cursor, Copilot):** Thực thi tuần tự từng task trong session chính theo hướng dẫn tại `write-plan`.
+
+Đưa **một** task mỗi lần — gộp nhiều task vào một subagent quay lại đúng vấn đề context mà cơ chế này sinh ra để tránh.
 
 **Ngoại lệ:** nhiều task nhỏ, cùng dạng thay đổi lặp lại (đổi một hằng số ở N file, thêm cùng
 một field vào N model) thì gộp thành **một** dispatch liệt kê đủ từng file — không phát N
@@ -86,7 +90,11 @@ Không có bằng chứng thì phát lại, đừng chuyển sang reviewer.
 
 ### 3. Reviewer nội bộ task
 
-Để tinh gọn token và tránh trễ, **mỗi task trong SDD chỉ dùng 1 Reviewer tích hợp** (không phát 2 subagent cho một task nhỏ).
+Để tinh gọn token và tránh trễ, **mỗi task trong SDD chỉ dùng 1 Reviewer tích hợp** (không phát 2 subagent cho một task nhỏ):
+- **Claude Code:** Gọi `Agent` với `subagent_type: general-purpose`.
+- **Antigravity (AGY):** Gọi `invoke_subagent` với `TypeName: "self"`, `Role: "Task Reviewer"`, `Model: "inherit"`.
+- **Codex / Single-Agent:** Tự đối chiếu diff `git diff HEAD` với spec và quy ước trước khi commit.
+
 Chỉ định Reviewer nhận: nội dung task, tiêu chí nghiệm thu, và diff chưa commit (`git diff HEAD`). Reviewer soi cả hai tiêu chí: (1) Tuân thủ spec và (2) Sạch sẽ, đúng quy ước code.
 
 Không đạt thì vào **vòng sửa**, tối đa **3 vòng** cho một task:

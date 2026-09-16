@@ -7,6 +7,7 @@
 <p align="center">
   <a href="#benchmark"><img src="https://img.shields.io/badge/Always--on%20Tokens-~720%20tokens-brightgreen?style=flat-square" alt="Token Budget"></a>
   <a href="#danh-mục-skill"><img src="https://img.shields.io/badge/Skills-15%20Skills-blue?style=flat-square" alt="Skill Count"></a>
+  <img src="https://img.shields.io/badge/Platforms-Claude%20Code%20%7C%20AGY%20%7C%20Codex-success?style=flat-square" alt="Multi-Platform Support">
   <img src="https://img.shields.io/badge/Stack-WordPress%20%7C%20Laravel%20%7C%20Node%20%7C%20Flutter-orange?style=flat-square" alt="Supported Stacks">
   <img src="https://img.shields.io/badge/Architecture-Zero--Submodule-purple?style=flat-square" alt="Zero Submodule">
   <img src="https://img.shields.io/badge/License-MIT-green?style=flat-square" alt="License">
@@ -20,20 +21,21 @@
 | Tiêu chí | `supercoders` (Upstream) | `devflow` (Repo này) | Lợi thế của devflow |
 | :--- | :---: | :---: | :--- |
 | **Always-on Token** | ~3.345 token | **~720 token** | 🟢 **Tiết kiệm ~78% context** |
+| **Đa nền tảng (Universal)** | Claude Code only | **Claude Code · AGY · Codex** | 🟢 Tương thích cả `AGENTS.md` & `CLAUDE.md` |
 | **Số lượng Skill** | 56 skills | **15 skills** | 🟢 Tinh gọn, không trùng lặp |
 | **Cấu trúc Git** | Git Submodules | **Zero Submodule** | 🟢 Độc lập 100%, không lo mất code |
-| **Nguyên tắc hành vi** | 10+ skills riêng lẻ (~2.100 dòng) | **`CLAUDE.md` + Hook (~80 dòng)** | 🟢 Tự động nạp, hiệu lực sắt đá |
+| **Nguyên tắc hành vi** | 10+ skills riêng lẻ (~2.100 dòng) | **`CLAUDE.md` / `AGENTS.md` (~85 dòng)** | 🟢 Tự động nạp, hiệu lực sắt đá |
 | **Hỗ trợ WordPress** | Không có hoặc bị xóa đè | **Bộ 3 skill chuyên sâu + WPCS** | 🟢 Đầy đủ ACF, Polylang, Seeder |
 | **Cô lập an toàn** | Sửa trực tiếp trên main repo | **`isolate-worktree` tự động** | 🟢 Không làm bẩn nhánh đang xem |
 
 ---
 
-## 🚀 Cài đặt nhanh
+## 🚀 Cài đặt đa nền tảng (Universal Setup)
 
-### 1. Cài đặt Plugin
+### 1. Dành cho Claude Code
 
 ```bash
-git clone <repo-url> ~/devflow
+git clone https://github.com/Kaito2013/devflow.git ~/devflow
 claude plugin marketplace add ~/devflow
 claude plugin install devflow@devflow
 ```
@@ -43,7 +45,25 @@ claude plugin install devflow@devflow
 > claude plugin disable supercoders --scope project
 > ```
 
-### 2. Cài đặt Pre-commit Hook tự động (Tùy chọn nhưng khuyến nghị)
+### 2. Dành cho Google Antigravity (AGY)
+
+AGY tự động nhận diện cấu trúc plugin qua `~/.gemini/config/plugins/` và đọc rules từ `AGENTS.md`:
+
+```bash
+git clone https://github.com/Kaito2013/devflow.git ~/devflow
+ln -s ~/devflow ~/.gemini/config/plugins/devflow
+```
+
+### 3. Dành cho OpenAI Codex / Cursor / GitHub Copilot
+
+Các môi trường này tự động đọc chuẩn file chỉ dẫn `AGENTS.md` tại gốc dự án:
+
+```bash
+# Liên kết file chỉ dẫn vào root project đang phát triển:
+ln -s ~/devflow/AGENTS.md ./AGENTS.md
+```
+
+### 4. Cài đặt Pre-commit Hook tự động (Tùy chọn cho mọi nền tảng)
 
 Tự động kiểm tra cú pháp PHP (`php -l`), Laravel Pint, ESLint, hoặc Flutter analyze trước mỗi lần `git commit`:
 
@@ -168,7 +188,7 @@ devflow/
 
 ## 🤝 Ghi công & Cảm ơn
 
-- Phần chuỗi quy trình phát triển và `CLAUDE.md` được viết mới 100%, lấy cảm hứng từ các triết lý nền tảng của [`obra/superpowers`](https://github.com/obra/superpowers) (Jesse Vincent) và [`mattpocock/skills`](https://github.com/mattpocock/skills) (Matt Pocock).
+- Phần chuỗi quy trình phát triển và `CLAUDE.md` / `AGENTS.md` được viết mới 100%, lấy cảm hứng từ các triết lý nền tảng của [`obra/superpowers`](https://github.com/obra/superpowers) (Jesse Vincent) và [`mattpocock/skills`](https://github.com/mattpocock/skills) (Matt Pocock).
 - `wp-security-audit` kế thừa và phát triển từ bộ quy chuẩn bảo mật WordPress của **lucas (DevVN)**.
 
 ---
