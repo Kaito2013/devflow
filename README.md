@@ -136,17 +136,71 @@ clarify-requirements ──> write-plan ──> isolate-worktree ──> subagen
 
 ---
 
-## 💡 Cách sử dụng
+## 💡 Cẩm nang thực chiến (Quick Playbook)
 
-Skill **tự kích hoạt thông minh** dựa trên ngữ cảnh bạn yêu cầu, không bắt buộc phải gõ lệnh:
+Skills trong devflow **tự kích hoạt thông minh** theo ngữ cảnh mà không bắt buộc phải nhớ tên lệnh. Dưới đây là 5 kịch bản thực tế phổ biến nhất kèm mẫu prompt copy-paste ăn liền:
 
-* *"Tôi muốn thêm tính năng thanh toán VNPay vào module đơn hàng"* $\rightarrow$ kích hoạt `clarify-requirements`
-* *"App này đang bị lỗi 500 khi nhấn nút đặt hàng"* $\rightarrow$ kích hoạt `diagnose-bug`
-* *"Kiểm tra bảo mật và chất lượng code plugin này"* $\rightarrow$ kích hoạt `wp-security-audit`
-* *"Convert bộ HTML trong thư mục template sang theme WP"* $\rightarrow$ kích hoạt `wp-theme-converter`
-* *"Quét kiến trúc dự án này giúp tôi"* $\rightarrow$ kích hoạt `analyze`
+### 1. Việc Gọn — Sửa nhanh trong vài file (90% công việc hàng ngày)
+> **Mục tiêu:** Sửa đổi trực tiếp, bỏ qua thủ tục spec/plan/worktree cồng kềnh.
 
-*(Bạn vẫn có thể gõ trực tiếp `/devflow:<tên-skill>` bất cứ khi nào muốn ép chạy một skill cụ thể).*
+```text
+Việc này gọn, hãy sửa trực tiếp: [Mô tả yêu cầu]. Sau đó chạy test/linter kiểm chứng giúp tôi.
+```
+*💡 Ví dụ:* `"Việc này gọn, hãy sửa trực tiếp: Cập nhật hàm validatePhone trong AuthService chấp nhận các đầu số mới 03x, 08x. Sau đó chạy npm test xác nhận."`
+
+---
+
+### 2. Việc Lớn — Tính năng mới / Đổi kiến trúc (Chuỗi SDD đầy đủ)
+> **Mục tiêu:** Đi trọn vẹn chuỗi `clarify-requirements` → `write-plan` → `isolate-worktree` → `subagent-execution` → `verify-done`.
+
+```text
+Tôi muốn phát triển tính năng: [Tên tính năng]. Hãy bắt đầu bằng clarify-requirements và phỏng vấn tôi để chốt đặc tả.
+```
+*💡 Mẹo tương tác:* Khi agent phỏng vấn trắc nghiệm, bạn chỉ cần gõ cộc lốc: `1: B, 2: A, 3: chọn đề xuất của bạn`. Không cần mất thời gian gõ giải thích dài dòng.
+
+---
+
+### 3. Sửa Bug — Tìm nguyên nhân gốc (Không vá triệu chứng)
+> **Mục tiêu:** Kích hoạt `diagnose-bug`, tạo lệnh tái hiện nhanh < 5s trước khi chạm vào code.
+
+```text
+Hệ thống gặp lỗi: [Mô tả lỗi hoặc dán log trace]. Lệnh tái hiện: [Lệnh test/curl]. Hãy chẩn đoán nguyên nhân gốc trước khi đề xuất cách sửa.
+```
+
+---
+
+### 4. Chuyên biệt WordPress — Convert Theme & Audit Code
+> **Mục tiêu:** Tự động hóa chuyển đổi giao diện hoặc rà soát 40+ lỗ hổng theo chuẩn DevVN.
+
+* **Convert Theme:**
+  ```text
+  Chuyển đổi bộ HTML trong thư mục /template sang theme WordPress chuẩn ACF Blocks & Hybrid Architecture theo quy trình 6 phase của devflow.
+  ```
+* **Audit bảo mật:**
+  ```text
+  Audit toàn bộ security, sanitization và nonce verification của plugin này theo chuẩn DevVN và Plugin Check.
+  ```
+
+---
+
+### 5. Bàn giao phiên — Chống tràn ngữ cảnh (Smart Zone ~150k tokens)
+> **Mục tiêu:** Bảo toàn tiến độ khi session quá dài hoặc kết thúc ngày làm việc.
+
+```text
+Hôm nay dừng ở đây, hãy chạy devflow:handoff tạo checkpoint bàn giao.
+```
+Sau đó gõ `/clear` (hoặc mở session mới) và nói:
+```text
+Đọc checkpoint gần nhất trong devflow/handoffs/ và tiếp tục công việc.
+```
+
+---
+
+### 📌 3 Mẹo vàng khi cộng tác với Devflow
+1. **Nghiệm thu & Dọn dẹp Worktree:** Khi agent hoàn thành công việc trong `.worktrees/`, bạn chỉ cần ra lệnh:  
+   *"Kết quả tốt rồi, hãy merge vào nhánh chính và dọn dẹp worktree giúp tôi."*
+2. **Khởi tạo Pre-commit bảo vệ code:** Chạy lệnh `bash ~/devflow/scripts/setup-pre-commit.sh` ngay khi gắn devflow vào dự án để tự động ngăn chặn commit lỗi cú pháp.
+3. **Ép chạy một skill cụ thể:** Bạn luôn có thể gõ trực tiếp `/devflow:<tên-skill>` (ví dụ `/devflow:wp-responsive-check http://localhost:8000`) bất cứ khi nào cần ép chạy độc lập.
 
 ---
 
