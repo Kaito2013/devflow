@@ -128,6 +128,7 @@ Chỉ khi reviewer trả `Đạt`, hoặc bạn đã tự phân xử `parked` h�
    ```bash
    bash scripts/bridge-notify.sh "Task <N>" "APPROVED" "<hash>"
    ```
+   *(Nếu task thất bại hoặc tắc nghẽn cần dừng: `bash scripts/bridge-notify.sh --event task_failed --task "Task <N>" --note "<lý do lỗi>"`).*
 4. Đóng task, chuyển sang task kế tiếp.
 
 ## Khi nào tự quyết, khi nào dừng hỏi
@@ -170,6 +171,11 @@ vào nhau (header, footer, functions.php đều liên quan), chia nhỏ ra chỉ
 
 Hết task thì gọi `verify-done` để chạy kiểm chứng toàn bộ, rồi báo cáo: số task, file đã đổi,
 các mục đã `parked` kèm ruling, lệnh kiểm chứng và output.
+
+**Bắn thông báo hoàn thành kế hoạch lớn tới devflow-cli:**
+```bash
+bash scripts/bridge-notify.sh --event plan_done --plan "<tên-plan>" --worktree "<đường-dẫn-worktree>" --index <tổng-số-task>
+```
 
 Nếu đã chạy trong worktree cô lập (`devflow:isolate-worktree`): báo đường dẫn worktree,
 tên nhánh, và hỏi người dùng muốn làm gì tiếp theo:
