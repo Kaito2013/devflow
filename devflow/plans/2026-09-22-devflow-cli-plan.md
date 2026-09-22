@@ -1,6 +1,6 @@
 # devflow-cli Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use supercoders:subagent-driven-development (recommended) or supercoders:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use supercoders:subagent-driven-development (recommended) or supercoders:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build `devflow-cli`, an ultra-lightweight (<20MB RAM) Go companion binary that provides a live Bubbletea TUI Dashboard and a two-way Telegram Bot with Gate Approval for `devflow`.
 
@@ -30,7 +30,7 @@
 **Interfaces:**
 - Produces: `config.Config`, `config.TelegramConfig`, `config.Load(path string) (*Config, error)`, `config.DefaultConfig() *Config`
 
-- [ ] **Step 1: Initialize Go module & Write failing configuration test**
+- [x] **Step 1: Initialize Go module & Write failing configuration test**
 
 ```go
 // internal/config/config_test.go
@@ -84,12 +84,12 @@ tui:
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test ./internal/config/...`
 Expected: FAIL (packages not found)
 
-- [ ] **Step 3: Implement minimal config package**
+- [x] **Step 3: Implement minimal config package**
 
 ```go
 // internal/config/config.go
@@ -155,12 +155,12 @@ func Load(path string) (*Config, error) {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test -v ./internal/config/...`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add internal/config go.mod go.sum
@@ -180,7 +180,7 @@ git commit -m "feat(config): implement configuration loading and defaults"
 - Consumes: None
 - Produces: `state.TaskItem`, `state.SessionState`, `state.ParsePlan(content string) (*SessionState, error)`, `state.FindLatestPlan(dir string) (string, error)`
 
-- [ ] **Step 1: Write failing plan parser test**
+- [x] **Step 1: Write failing plan parser test**
 
 ```go
 // internal/state/plan_parser_test.go
@@ -206,7 +206,7 @@ func TestParsePlan_TasksAndTags(t *testing.T) {
 - [/] Step 1: Coding
 
 ### Task 3: [UI] Add Login Button
-- [ ] Step 1: Markup
+- [x] Step 1: Markup
 `
 	session, err := state.ParsePlan(markdown)
 	if err != nil {
@@ -229,12 +229,12 @@ func TestParsePlan_TasksAndTags(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test ./internal/state/...`
 Expected: FAIL
 
-- [ ] **Step 3: Implement Plan Parser and Session State**
+- [x] **Step 3: Implement Plan Parser and Session State**
 
 ```go
 // internal/state/state.go
@@ -356,12 +356,12 @@ func finalizeTaskStatus(task *TaskItem, totalSteps, doneSteps int, inProgress bo
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test -v ./internal/state/...`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add internal/state/
@@ -382,7 +382,7 @@ git commit -m "feat(state): implement plan markdown parser and task state model"
 **Interfaces:**
 - Produces: `gate.Manager`, `gate.Manager.Acquire(taskIndex int)`, `gate.Manager.Release(taskIndex int)`, `ipc.Server`, `ipc.Client.Notify(event Notification)`
 
-- [ ] **Step 1: Write failing Gate Manager test**
+- [x] **Step 1: Write failing Gate Manager test**
 
 ```go
 // internal/gate/gate_test.go
@@ -423,12 +423,12 @@ func TestGateManager_AcquireAndRelease(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test ./internal/gate/...`
 Expected: FAIL
 
-- [ ] **Step 3: Implement Gate Manager & Unix IPC Server/Client**
+- [x] **Step 3: Implement Gate Manager & Unix IPC Server/Client**
 
 ```go
 // internal/gate/gate.go
@@ -580,12 +580,12 @@ func SendNotification(socketPath string, notif Notification) error {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test -v ./internal/gate/... ./internal/ipc/...`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add internal/gate/ internal/ipc/
@@ -604,7 +604,7 @@ git commit -m "feat(ipc): implement gate lock manager and unix domain socket IPC
 - Consumes: `state.SessionState`, `state.ParsePlan`
 - Produces: `watcher.Engine`, `watcher.Engine.Start(dir string, onChange func(*state.SessionState))`
 
-- [ ] **Step 1: Write failing watcher debouncing test**
+- [x] **Step 1: Write failing watcher debouncing test**
 
 ```go
 // internal/watcher/watcher_test.go
@@ -626,7 +626,7 @@ func TestWatcher_DetectsPlanChange(t *testing.T) {
 	_ = os.MkdirAll(plansDir, 0755)
 
 	planFile := filepath.Join(plansDir, "2026-09-22-test.md")
-	_ = os.WriteFile(planFile, []byte("### Task 1: Initial\n- [ ] step 1\n"), 0644)
+	_ = os.WriteFile(planFile, []byte("### Task 1: Initial\n- [x] step 1\n"), 0644)
 
 	changed := make(chan *state.SessionState, 1)
 	w, err := watcher.New(tmpDir, func(s *state.SessionState) {
@@ -652,12 +652,12 @@ func TestWatcher_DetectsPlanChange(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test ./internal/watcher/...`
 Expected: FAIL
 
-- [ ] **Step 3: Implement Watcher Engine**
+- [x] **Step 3: Implement Watcher Engine**
 
 ```go
 // internal/watcher/watcher.go
@@ -749,12 +749,12 @@ func (e *Engine) Stop() error {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test -v ./internal/watcher/...`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add internal/watcher/
@@ -773,7 +773,7 @@ git commit -m "feat(watcher): implement fsnotify plan file watcher with debounci
 - Consumes: `config.TelegramConfig`, `state.SessionState`, `gate.Manager`
 - Produces: `telegram.Bot`, `telegram.Bot.Start()`, `telegram.Bot.NotifyTaskComplete(task state.TaskItem)`
 
-- [ ] **Step 1: Write failing command routing test**
+- [x] **Step 1: Write failing command routing test**
 
 ```go
 // internal/telegram/bot_test.go
@@ -807,12 +807,12 @@ func TestTelegramBot_SecurityFilter(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test ./internal/telegram/...`
 Expected: FAIL
 
-- [ ] **Step 3: Implement Telegram Bot Client & Command Router**
+- [x] **Step 3: Implement Telegram Bot Client & Command Router**
 
 ```go
 // internal/telegram/bot.go
@@ -969,12 +969,12 @@ func (b *Bot) Stop() {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test -v ./internal/telegram/...`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add internal/telegram/
@@ -995,7 +995,7 @@ git commit -m "feat(telegram): implement bot handler, gate approval commands and
 - Consumes: `state.SessionState`, `gate.Manager`
 - Produces: `tui.NewModel(gm *gate.Manager) tea.Model`, `tui.Start()`
 
-- [ ] **Step 1: Write failing TUI model update test**
+- [x] **Step 1: Write failing TUI model update test**
 
 ```go
 // internal/tui/tui_test.go
@@ -1026,12 +1026,12 @@ func TestTUI_ModelUpdateState(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test ./internal/tui/...`
 Expected: FAIL
 
-- [ ] **Step 3: Implement Lipgloss styles and Bubbletea TUI Model & View**
+- [x] **Step 3: Implement Lipgloss styles and Bubbletea TUI Model & View**
 
 ```go
 // internal/tui/style.go
@@ -1172,12 +1172,12 @@ func (m Model) View() string {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go test -v ./internal/tui/...`
 Expected: PASS
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add internal/tui/
@@ -1195,7 +1195,7 @@ git commit -m "feat(tui): implement Bubbletea dashboard model, view, and styling
 **Interfaces:**
 - Produces: Executable `devflow-cli` with subcommands: `tui`, `daemon`, `notify`, `gate`, `init`, `version`.
 
-- [ ] **Step 1: Write CLI main entrypoint and subcommand dispatch**
+- [x] **Step 1: Write CLI main entrypoint and subcommand dispatch**
 
 ```go
 // cmd/devflow/main.go
@@ -1365,12 +1365,12 @@ tui:
 }
 ```
 
-- [ ] **Step 2: Build binary and verify CLI commands**
+- [x] **Step 2: Build binary and verify CLI commands**
 
 Run: `cd /Users/hoaiminh/devflow-cli && go build -o devflow-cli ./cmd/devflow && ./devflow-cli version`
 Expected: `devflow-cli v0.1.0`
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add cmd/ Makefile
@@ -1388,7 +1388,7 @@ git commit -m "feat(cli): wire up subcommands tui, daemon, notify, gate, and ini
 **Interfaces:**
 - Invokes `devflow-cli notify` and `devflow-cli gate wait` safely without crashing if `devflow-cli` is absent.
 
-- [ ] **Step 1: Write helper bridge script in devflow repo**
+- [x] **Step 1: Write helper bridge script in devflow repo**
 
 ```bash
 #!/usr/bin/env bash
@@ -1404,21 +1404,21 @@ if command -v devflow-cli >/dev/null 2>&1; then
 fi
 ```
 
-- [ ] **Step 2: Verify helper execution when devflow-cli is installed vs absent**
+- [x] **Step 2: Verify helper execution when devflow-cli is installed vs absent**
 
 Run: `bash /Users/hoaiminh/devflow/scripts/bridge-notify.sh "Test Task" "APPROVED" "abc1234"`
 Expected: Clean exit 0
 
-- [ ] **Step 3: Update subagent-execution skill with non-intrusive hook notification**
+- [x] **Step 3: Update subagent-execution skill with non-intrusive hook notification**
 
 Integrate the bridge call right after a task reviewer gives the Approved verdict in `subagent-execution/SKILL.md`.
 
-- [ ] **Step 4: End-to-end simulation**
+- [x] **Step 4: End-to-end simulation**
 1. Start daemon or TUI in background.
 2. Trigger `bridge-notify.sh`.
 3. Confirm event reaches state and displays on monitor.
 
-- [ ] **Step 5: Commit in devflow repo**
+- [x] **Step 5: Commit in devflow repo**
 
 ```bash
 git -C /Users/hoaiminh/devflow add scripts/bridge-notify.sh skills/subagent-execution/SKILL.md
