@@ -124,7 +124,11 @@ Chỉ khi reviewer trả `Đạt`, hoặc bạn đã tự phân xử `parked` h�
    ```
 2. Lấy commit hash (`git rev-parse --short HEAD`) và ghi vào ledger:
    `Task N: complete — commit <hash>`
-3. Đóng task, chuyển sang task kế tiếp.
+3. **Bắn thông báo tới devflow-cli (nếu có):**
+   ```bash
+   bash scripts/bridge-notify.sh "Task <N>" "APPROVED" "<hash>"
+   ```
+4. Đóng task, chuyển sang task kế tiếp.
 
 ## Khi nào tự quyết, khi nào dừng hỏi
 
